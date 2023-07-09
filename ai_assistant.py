@@ -4,10 +4,7 @@ from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import ChatMessage
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from langchain.chains.question_answering import load_qa_chain
 import streamlit as st
-from streamlit_chat import message
-from dataclasses import dataclass
 from langchain.chains.summarize import load_summarize_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.document_loaders import PyPDFLoader
