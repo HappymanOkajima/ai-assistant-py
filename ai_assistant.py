@@ -1,20 +1,14 @@
 from io import StringIO
-from typing import Any, Dict, List
 from langchain import LLMChain, PromptTemplate
 from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import ChatMessage
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from langchain.memory import ConversationBufferWindowMemory
-from langchain.schema import LLMResult
 from langchain.chains.question_answering import load_qa_chain
-from langchain.docstore.document import Document
 import streamlit as st
 from streamlit_chat import message
-from streamlit.delta_generator import DeltaGenerator
 from dataclasses import dataclass
 from langchain.chains.summarize import load_summarize_chain
-from langchain.document_loaders.base import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.document_loaders import PyPDFLoader
 import tiktoken
