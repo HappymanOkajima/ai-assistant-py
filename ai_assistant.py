@@ -148,7 +148,6 @@ with st.sidebar:
   st.header('AIアシスタントに相談してみよう')
   file = st.file_uploader('話題としたい資料（テキストまたはPDF）をアップロードしてください')
   if file is not None:
-      file_type = file.name.split(".")[-1]
       topic = process_uploaded_file(file)
       tokenizer = tiktoken.encoding_for_model("gpt-4")
       tokenlen = len(tokenizer.encode(topic))
