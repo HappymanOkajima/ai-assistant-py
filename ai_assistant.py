@@ -13,7 +13,7 @@ import os
 from uuid import uuid4
 from pathlib import Path
 from langchain.callbacks.base import BaseCallbackHandler
-
+import mimetypes
 
 load_dotenv()
 openai_api_key = os.environ.get("OPENAI_API_KEY")
@@ -57,14 +57,14 @@ def process_uploaded_file(upload):
     str
         ファイルの内容
     """
-    # ファイルの拡張子を取得
-    file_type = upload.name.split(".")[-1]
-    print(file_type)
+    # ファイルのMIMEタイプを推測
+    mime_type, _ = mimetypes.guess_type(upload.name)
+    print(mime_type)
 
     # ファイルの種類に応じて処理
-    if file_type == "txt":
+    if mime_type is not None and (mime_type.startswith("text/") or mime_type == "application/vnd.ms-excel"):
         content = StringIO(upload.getvalue().decode('utf-8')).read()
-    elif file_type == "pdf":
+    elif mime_type == "application/pdf":
         # ファイルを一時的に保存
         path = save_uploaded_file(upload)
         loader = PyPDFLoader(path)
