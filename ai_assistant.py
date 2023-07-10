@@ -17,6 +17,7 @@ from langchain.callbacks.base import BaseCallbackHandler
 
 load_dotenv()
 openai_api_key = os.environ.get("OPENAI_API_KEY")
+openai_model = os.environ.get("OPENAI_MODEL","gpt-3.5-turbo-16k")
 
 def save_uploaded_file(upload, path="."):
     """
@@ -84,8 +85,6 @@ def create_summary(content):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=6000, chunk_overlap=50)
     docs = text_splitter.create_documents(texts=[content],metadatas=[{"source": ""}])
     print(f"{len(docs)} docs")
-    # for doc in docs:
-    #     print(doc.page_content + "\n-------------------------------------\n")
     llm = ChatOpenAI(model="gpt-3.5-turbo-16k", streaming=True, 
                      callbacks=[StreamingStdOutCallbackHandler()], verbose=True, temperature=0)
     
@@ -107,7 +106,7 @@ def create_summary(content):
                                  map_prompt=MAP_PROMPT, 
                                  combine_prompt=COM_PROMPT)
     summary = chain.run(docs)
-    print(f"\nsummray = {summary}")
+    # print(f"\nsummray = {summary}")
     return summary
 
 
@@ -160,20 +159,22 @@ with st.sidebar:
       st.code(topic,"txt")
       st.session_state["topic"] = ChatMessage(role="assistant", content=topic)
 
-
+if "topic" not in st.session_state:
+    st.session_state["topic"] = ChatMessage(role="assistant", content="")
+    
 if "messages" not in st.session_state:
     st.session_state["messages"] = []
  
 for msg in st.session_state.messages:
     st.chat_message(msg.role).write(msg.content)
 
-if chat_prompt := st.chat_input("質問をどうぞ"):
+if chat_prompt := st.chat_input("質問や相談をどうぞ"):
     st.chat_message("user").write(chat_prompt)
 
     with st.chat_message("assistant"):
         stream_handler = StreamHandler(st.empty())
         prompt = create_prompt()
-        llm = ChatOpenAI(model="gpt-3.5-turbo-16k", openai_api_key=openai_api_key, streaming=True, callbacks=[stream_handler])
+        llm = ChatOpenAI(model=openai_model, openai_api_key=openai_api_key, streaming=True, callbacks=[stream_handler])
         chain = LLMChain(llm=llm, prompt=prompt, verbose=True)
         history = extract_content_pairs(st.session_state.messages)
         response = chain.run(question = chat_prompt, chat_history = history, topic = st.session_state["topic"].content)
