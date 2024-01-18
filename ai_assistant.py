@@ -1,13 +1,14 @@
 from io import StringIO
-from langchain import LLMChain, PromptTemplate
+from langchain.chains import LLMChain
+from langchain.prompts import PromptTemplate
 from dotenv import load_dotenv
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.schema import ChatMessage
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import streamlit as st
 from langchain.chains.summarize import load_summarize_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader
 import tiktoken
 import os
 from uuid import uuid4

@@ -11,6 +11,7 @@ tiktoken = "*"
 streamlit = "*"
 streamlit-chat = "*"
 pypdf = "*"
+langchain-openai = "*"
 
 [dev-packages]
 
